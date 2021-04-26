@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -37,6 +38,15 @@ namespace PolicyAPI
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PolicyAPI", Version = "v1" });
             });
 
+            // Ativa o uso do token como forma de autorizar o acesso
+            // a recursos deste projeto
+            services.AddAuthorization(auth =>
+            {
+                auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser().Build());
+            });
+
             var key = Encoding.ASCII.GetBytes(Settings.Secret);
             services.AddAuthentication(x =>
             {
@@ -55,6 +65,8 @@ namespace PolicyAPI
                     ValidateAudience = false
                 };
             });
+
+            LoadPolicies(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,6 +87,26 @@ namespace PolicyAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+        }
+
+        private void LoadPolicies(IServiceCollection services)
+        {
+            services.AddAuthorization(auth =>
+            {
+                auth.AddPolicy("ListarPedidos", op =>
+                {
+                    op.RequireAuthenticatedUser()
+                      .RequireClaim("listar", "Pedidos")
+                      .Build();
+                });
+                
+                auth.AddPolicy("ListarProdutos", op =>
+                {
+                    op.RequireAuthenticatedUser()
+                      .RequireClaim("listar", "Produtos")
+                      .Build();
+                });
             });
         }
     }

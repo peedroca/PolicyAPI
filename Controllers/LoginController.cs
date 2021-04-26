@@ -16,7 +16,7 @@ namespace PolicyAPI.Controllers
             var userModel = UserRepository.Get(user.Usuario, user.Senha);
             var token = TokenService.GenerateToken(userModel);
 
-            return Ok(token);
+            return Ok(new { access_token = token });
         }
     }
 }
