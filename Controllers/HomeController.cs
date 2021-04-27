@@ -15,6 +15,13 @@ namespace PolicyAPI.Controllers
             return Ok(new[] { "Pedido1", "Pedido2" });
         }
 
+        [HttpPost("Produtos")]
+        [Authorize(Policy = "CriarProdutos")]
+        public IActionResult CriarProdutos([FromBody] string nome)
+        {
+            return Created(string.Empty, string.Format("Produto {0} criado com sucesso!", nome));
+        }
+
         [HttpGet("Produtos")]
         [Authorize(Policy = "ListarProdutos")]
         public IActionResult Produtos()

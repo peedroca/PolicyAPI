@@ -18,8 +18,8 @@ namespace PolicyAPI.Repositories
                 Role = "admin",
                 Permissions = new List<Tuple<string, string>>()
                 {
-                    new Tuple<string, string>("listar", "Produtos"),
-                    new Tuple<string, string>("listar", "Pedidos"),
+                    new Tuple<string, string>("permissao", "listar_pedido"),
+                    new Tuple<string, string>("permissao", "listar_etiqueta")
                 }
             });
             
@@ -32,6 +32,18 @@ namespace PolicyAPI.Repositories
                 Permissions = new List<Tuple<string, string>>()
                 {
                     new Tuple<string, string>("listar", "Produtos")
+                }
+            });
+
+            users.Add(new User 
+            { 
+                Id = 3, 
+                Username = "superman", 
+                Password = "superman", 
+                Role = "default",
+                Permissions = new List<Tuple<string, string>>()
+                {
+                    new Tuple<string, string>("permissao", "Orcamento")
                 }
             });
       

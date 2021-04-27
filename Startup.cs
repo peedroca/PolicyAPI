@@ -97,14 +97,21 @@ namespace PolicyAPI
                 auth.AddPolicy("ListarPedidos", op =>
                 {
                     op.RequireAuthenticatedUser()
-                      .RequireClaim("listar", "Pedidos")
+                      .RequireClaim("permissao", "listar_pedido")
                       .Build();
                 });
                 
                 auth.AddPolicy("ListarProdutos", op =>
                 {
                     op.RequireAuthenticatedUser()
-                      .RequireClaim("listar", "Produtos")
+                      .RequireClaim("permissao", "listar_produto")
+                      .Build();
+                });
+
+                auth.AddPolicy("CriarProdutos", op =>
+                {
+                    op.RequireAuthenticatedUser()
+                      .RequireClaim("permissao", "criar_produto")
                       .Build();
                 });
             });
